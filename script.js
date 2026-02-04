@@ -14,15 +14,20 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   });
 });
 
-// Typing effect for hero title
+// Typing effect for hero title (and other elements)
 function typeWriter(element, text, speed = 50) {
+  if (element.typingTimeout) {
+    clearTimeout(element.typingTimeout);
+  }
   let i = 0;
   element.textContent = "";
   function type() {
     if (i < text.length) {
       element.textContent += text.charAt(i);
       i++;
-      setTimeout(type, speed);
+      element.typingTimeout = setTimeout(type, speed);
+    } else {
+      element.typingTimeout = null;
     }
   }
   type();
@@ -159,3 +164,257 @@ console.log(
   "%c└──────────────────────────────────────────────────────┘",
   "color: #33ff33",
 );
+
+// Language switching effect
+document.addEventListener("DOMContentLoaded", () => {
+  const heroCode = document.querySelector(".hero-code");
+  const heroDescription = document.querySelector(".hero-description");
+
+  const languages = [
+    {
+      code: 'print("Hello World!")',
+      commentStart: '""" ',
+      commentEnd: ' """',
+      name: "Python",
+    },
+    {
+      code: 'System.out.println("Hello World!");',
+      commentStart: "/* ",
+      commentEnd: " */",
+      name: "Java",
+    },
+    {
+      code: 'console.log("Hello World!");',
+      commentStart: "/* ",
+      commentEnd: " */",
+      name: "JavaScript",
+    },
+    {
+      code: 'std::cout << "Hello World!" << std::endl;',
+      commentStart: "/* ",
+      commentEnd: " */",
+      name: "C++",
+    },
+    {
+      code: "<h1>Hello World!</h1>",
+      commentStart: "<!-- ",
+      commentEnd: " -->",
+      name: "HTML",
+    },
+    {
+      code: 'printf("Hello World!");',
+      commentStart: "/* ",
+      commentEnd: " */",
+      name: "C",
+    },
+    {
+      code: 'Console.WriteLine("Hello World!");',
+      commentStart: "/* ",
+      commentEnd: " */",
+      name: "C#",
+    },
+    {
+      code: 'puts "Hello World!"',
+      commentStart: "=begin ",
+      commentEnd: " =end",
+      name: "Ruby",
+    },
+    {
+      code: 'fmt.Println("Hello World!")',
+      commentStart: "/* ",
+      commentEnd: " */",
+      name: "Go",
+    },
+    {
+      code: 'println!("Hello World!");',
+      commentStart: "/* ",
+      commentEnd: " */",
+      name: "Rust",
+    },
+    {
+      code: 'print("Hello World!")',
+      commentStart: "/* ",
+      commentEnd: " */",
+      name: "Swift",
+    },
+    {
+      code: 'echo "Hello World!";',
+      commentStart: "/* ",
+      commentEnd: " */",
+      name: "PHP",
+    },
+    {
+      code: 'println("Hello World!")',
+      commentStart: "/* ",
+      commentEnd: " */",
+      name: "Kotlin",
+    },
+    {
+      code: 'console.log("Hello World!");',
+      commentStart: "/* ",
+      commentEnd: " */",
+      name: "TypeScript",
+    },
+    {
+      code: 'print("Hello World!")',
+      commentStart: "# ",
+      commentEnd: " #",
+      name: "R",
+    },
+    {
+      code: 'print("Hello World!")',
+      commentStart: "--[[ ",
+      commentEnd: " ]]",
+      name: "Lua",
+    },
+    {
+      code: 'println("Hello World!")',
+      commentStart: "/* ",
+      commentEnd: " */",
+      name: "Scala",
+    },
+    {
+      code: "print('Hello World!');",
+      commentStart: "/* ",
+      commentEnd: " */",
+      name: "Dart",
+    },
+    {
+      code: 'Write-Host "Hello World!"',
+      commentStart: "<# ",
+      commentEnd: " #>",
+      name: "PowerShell",
+    },
+    {
+      code: "SELECT 'Hello World!';",
+      commentStart: "/* ",
+      commentEnd: " */",
+      name: "SQL",
+    },
+    {
+      code: "print *, 'Hello World!'",
+      commentStart: "! ",
+      commentEnd: " !",
+      name: "Fortran",
+    },
+    {
+      code: "DISPLAY 'HELLO WORLD!'",
+      commentStart: "* ",
+      commentEnd: " *",
+      name: "COBOL",
+    },
+    {
+      code: '(println "Hello World!")',
+      commentStart: "; ",
+      commentEnd: " ;",
+      name: "Clojure",
+    },
+    {
+      code: 'IO.puts("Hello World!")',
+      commentStart: "# ",
+      commentEnd: " #",
+      name: "Elixir",
+    },
+    {
+      code: 'println "Hello World!"',
+      commentStart: "/* ",
+      commentEnd: " */",
+      name: "Groovy",
+    },
+    {
+      code: 'Console.WriteLine("Hello World!")',
+      commentStart: "' ",
+      commentEnd: " '",
+      name: "Visual Basic",
+    },
+    {
+      code: 'NSLog(@"Hello World!");',
+      commentStart: "/* ",
+      commentEnd: " */",
+      name: "Objective-C",
+    },
+    {
+      code: "WriteLn('Hello World!');",
+      commentStart: "{ ",
+      commentEnd: " }",
+      name: "Pascal",
+    },
+    {
+      code: 'Put_Line("Hello World!");',
+      commentStart: "-- ",
+      commentEnd: " --",
+      name: "Ada",
+    },
+    {
+      code: 'writeln("Hello World!");',
+      commentStart: "/* ",
+      commentEnd: " */",
+      name: "D",
+    },
+    {
+      code: 'puts "Hello World!"',
+      commentStart: "# ",
+      commentEnd: " #",
+      name: "Crystal",
+    },
+    {
+      code: 'console.log("Hello World!");',
+      commentStart: "/* ",
+      commentEnd: " */",
+      name: "Solidity",
+    },
+    {
+      code: "ShowMessage('Hello World!');",
+      commentStart: "{ ",
+      commentEnd: " }",
+      name: "Delphi",
+    },
+    {
+      code: 'echo "Hello World!";',
+      commentStart: "/* ",
+      commentEnd: " */",
+      name: "Hack",
+    },
+    {
+      code: 'console.log "Hello World!"',
+      commentStart: "### ",
+      commentEnd: " ###",
+      name: "CoffeeScript",
+    },
+    {
+      code: 'trace("Hello World!");',
+      commentStart: "/* ",
+      commentEnd: " */",
+      name: "ActionScript",
+    },
+    {
+      code: "disp('Hello World!')",
+      commentStart: "%{ ",
+      commentEnd: " %}",
+      name: "MATLAB",
+    },
+    {
+      code: 'PRINT "Hello World!"',
+      commentStart: "REM ",
+      commentEnd: " REM",
+      name: "BASIC",
+    },
+  ];
+
+  let currentIndex = 0;
+
+  setInterval(() => {
+    currentIndex = (currentIndex + 1) % languages.length;
+
+    heroDescription.setAttribute(
+      "data-comment-start",
+      languages[currentIndex].commentStart,
+    );
+    heroDescription.setAttribute(
+      "data-comment-end",
+      languages[currentIndex].commentEnd,
+    );
+
+    typeWriter(heroCode, languages[currentIndex].code, 40);
+  }, 3000);
+});
